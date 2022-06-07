@@ -135,7 +135,7 @@ function VideoComponent(props) {
       const detection = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
       const resizedDetection = faceapi.resizeResults(detection, displaySize)
       canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight)
-      // faceapi.draw.drawDetections(canvasRef.current, resizedDetection)
+      // faceapi.draw.drawDetections(canvasRef.current, resizedDetection)d
 
       console.log(detection)
     }, 2000)
