@@ -40,7 +40,6 @@ function VideoComponent(props) {
   const micRef = useRef(null);
 
   const [camFirstTime, setCamFirstTime] = useState(true)
-  const [currentCamOn, setCurrentCamOn] = useState(false)
 
   const { webcamStream, micStream, webcamOn, micOn } = useParticipant(
     props.participantId
@@ -79,7 +78,6 @@ function VideoComponent(props) {
         faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
       ]).then(() => {
-        console.log('load finish')
         if (webcamOn) {
           startVideo()
         } else {
@@ -91,13 +89,6 @@ function VideoComponent(props) {
   }, [webcamOn])
 
   const startVideo = () => {
-      // navigator.getUserMedia(
-      //   {
-      //     video: {}
-      //   },
-      //   stream => videoRef.current.srcObject = stream,
-      //   err => console.log(err),
-      // )
       navigator.getUserMedia(
         {
           video: true,
@@ -117,28 +108,49 @@ function VideoComponent(props) {
       setCamFirstTime(false)
     } 
     else if (!webcamOn){
-      setCurrentCamOn(false)
       let video = document.getElementsByClassName('app__videoFeed')[0];
 		  video.srcObject.getTracks()[0].stop();
     } 
   }
 
+  // useEffect(() => {
+  //   const handleVideoOnPlay = () => {
+  //     if (webcamOn) {
+  //       setInterval(async () => {
+  //         canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current)
+  //         const displaySize = {
+  //           width: videoWidth,
+  //           height: videoHeight
+  //         }
+
+  //         faceapi.matchDimensions(canvasRef.current, displaySize)
+  //         const detection = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+
+  //         console.log(detection)
+
+  //       }, 1000)
+  //     } else if (!webcamOn) {
+  //       console.log('stop detection')
+  //     }
+  //   }
+  // }, [webcamOn])
+
   const handleVideoOnPlay = () => {
+    console.log('Check Detect or Not')
     setInterval(async () => {
       canvasRef.current.innerHTML = faceapi.createCanvasFromMedia(videoRef.current)
       const displaySize = {
         width: videoWidth,
         height: videoHeight
       }
-
+  
       faceapi.matchDimensions(canvasRef.current, displaySize)
       const detection = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
-      const resizedDetection = faceapi.resizeResults(detection, displaySize)
-      canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight)
-      // faceapi.draw.drawDetections(canvasRef.current, resizedDetection)d
-
+      // const resizedDetection = faceapi.resizeResults(detection, displaySize)
+      // canvasRef.current.getContext('2d').clearRect(0, 0, videoWidth, videoHeight)
+      // faceapi.draw.drawDetections(canvasRef.current, resizedDetection)
       console.log(detection)
-    }, 2000)
+      }, 1000)
   }
 
   return (
@@ -150,10 +162,18 @@ function VideoComponent(props) {
           <canvas className='position-absolute' ref={canvasRef} />
         </div>
       )} */}
-      <div className='position-flex justify-content-center'>
-          <video className="app__videoFeed" ref={videoRef} autoPlay muted height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay}  />
-          <canvas className='position-absolute' ref={canvasRef} />
-        </div>
+      <div className='container'>
+        <video 
+          className="app__videoFeed" 
+          ref={videoRef} 
+          autoPlay 
+          muted 
+          height={videoHeight} 
+          width={videoWidth} 
+          onPlay={handleVideoOnPlay}
+        />
+        <canvas className='canvas-wrapper' ref={canvasRef} />
+      </div>
     </div>
   );
 

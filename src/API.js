@@ -14,20 +14,43 @@ export const createMeeting = async ({ token }) => {
     return meetingId;
 }
 
-export const fetchHlsDownstreamUrl = async ({ meetingId }) => {
-    const res = await fetch (
-        `https://api.videosdk.live/v2/hls/?roomId=${meetingId}`,
-        {
-            method: "GET",
-            headers: {
-                authorization: `${authToken}`,
-                "Content-Type": "application/json",
-            },
-        }
-    );
 
-    const json = await res.json()
-    const { downstreamUrl } = json?.data[0];
-    return downstreamUrl
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export const fetchHlsDownstreamUrl = async ({ meetingId }) => {
+//     const res = await fetch (
+//         `https://api.videosdk.live/v2/hls/?roomId=${meetingId}`,
+//         {
+//             method: "GET",
+//             headers: {
+//                 authorization: `${authToken}`,
+//                 "Content-Type": "application/json",
+//             },
+//         }
+//     );
+
+//     const json = await res.json()
+//     const { downstreamUrl } = json?.data[0];
+//     return downstreamUrl
+
+// }
